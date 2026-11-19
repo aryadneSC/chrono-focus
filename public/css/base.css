@@ -1,0 +1,47 @@
+/* defin a aparência padrão dos elementos HTML estilos fundamentais */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+   background-color: var(--background-color); 
+   color: var(--primary-text-color);
+   font-family: Arial, Helvetica, sans-serif;
+   margin: 0;
+}
+
+
+h1,
+h2,
+h3,
+p{
+    margin: 0;
+    background-color: inherit;  
+}
+
+h1, h2, h3 {
+    color: var(--primary-text-color);
+    margin-bottom: var(--space-sm);
+    margin-top: var(--space-lg);
+
+}
+
+h1 {
+    font-size: var(--font-size-h1);
+}
+
+h2 {
+    font-size: var(--font-size-h2);
+}
+
+h3 {
+    font-size: var(--font-size-h3);
+}
+
+p {
+    color: var(--secondary-text-color);
+    margin-block: var(--space-xs);
+    font-size: var(--font-size-base);
+}
+

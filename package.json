@@ -1,0 +1,11 @@
+{
+  "name": "chrono-focus",
+  "version": "3.0.0-beta.1",
+  "description": "Planejamento de estudos com cronograma e timer Pomodoro.",
+  "private": true,
+  "license": "ISC",
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  }
+}

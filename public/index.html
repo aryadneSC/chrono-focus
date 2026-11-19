@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chrono Focus</title>
+
+    <script type="module" src="./js/pages/router.js"></script>
+    <script type="module" src="./js/main.js"></script>
+    
+    <link rel="stylesheet" href="./css/layout.css">
+    <link rel="stylesheet" href="./css/utilities.css">
+    <link rel="stylesheet" href="./css/settings.css"> 
+    <link rel="stylesheet" href="./css/base.css">
+    <link rel="stylesheet" href="./css/components.css">
+    <link rel="stylesheet" href="./css/pages.css">
+
+</head>
+<body>
+    <main id="activity"></main>
+
+    <template data-page="welcome">
+        <header></header>
+
+        <div class="page-body">
+            <div class="page-content">
+                <div class="logo-container">
+                    <img class="logo" src="./assets/images/icons/logo.png" alt="Chrono Focus">
+                </div>
+    
+                <div class="welcome-text">
+                    <h1>Chrono Focus</h1>
+                    <p>Consistência acima da perfeição.</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="actions-row">
+            <button type="button" id="welcome-start" class="btn btn-primary">Começar</button>
+            <button type="button" id="welcome-skip" class="btn btn-secondary">pular (dev mode)</button>
+        </footer>
+    </template>
+
+    <template data-page="questionnaire-days">
+        <header class="header-sequence">
+            <div class="steps">
+                <div class="step active" id="rotina-step">
+                    <p>Sua rotina</p>
+                </div>
+                <div class="step" id="materias-step">
+                    <p>Matérias</p>
+                </div>
+                <div class="step"><p>Configurações do cronograma</p></div>
+                <div class="step" id="revisao-step">
+                    <p>Revisão</p>
+                </div>
+            </div>
+
+            <span class="push-end">Etapa 1 de 4</span>
+        </header>
+            
+        <div class="page-body">
+            <!-- mudar cor do paragrafo conforme a sequencia avança -->
+            
+
+            <div class="page-content">
+                <h2>Dias de estudo</h2>
+               
+                    <!-- card é um sub-container e card accent é destacado -->
+
+                    <div class="checkbox-container">
+                        <button type="button" class="checkbox-button" data-day="seg" aria-pressed="false">seg</button>
+                        <button type="button" class="checkbox-button" data-day="ter" aria-pressed="false">ter</button>
+                        <button type="button" class="checkbox-button" data-day="qua" aria-pressed="false">qua</button>
+                        <button type="button" class="checkbox-button" data-day="qui" aria-pressed="false">qui</button>
+                        <button type="button" class="checkbox-button" data-day="sex" aria-pressed="false">sex</button>
+                        <button type="button" class="checkbox-button" data-day="sab" aria-pressed="false">sab</button>
+                        <button type="button" class="checkbox-button" data-day="dom" aria-pressed="false">dom</button>
+                    </div>
+                    <p id="routine-days-error" class="text-danger" role="alert"></p>
+                    <p class="text-info hidden">> Recomendamos separar pelo menos um dia de descanso</p>
+                    <h2>Preferência de tempo</h2>
+                    <p id="routine-preference-error" class="text-danger" role="alert"></p>
+                    <div class="card-column">  
+                        <div id="study-preference-container" class="card-column">
+                            <div id="preference-choice" class="actions-row">
+                                <button type="button" id="preference-fixed-time" aria-controls="fixed-time-panel" aria-expanded="false" class="btn btn-choose">Horário</button>
+                                <p>ou</p>
+                                <button type="button" id="preference-period" aria-controls="period-panel" aria-expanded="false" class="btn btn-choose">Período</button>
+                            </div>
+                            <!-- para o botão preference-fixed-time -->
+                            <div id="fixed-time-panel" class="card-column hidden">
+                                <h2>Quanto tempo você tem em cada dia?</h2>
+                                <button type="button" id="preference-back-fixed-time" class="btn btn-secondary">Voltar</button>
+                            </div>
+                                
+                            <!-- para o botão preference-period -->
+                            <div id="period-panel" class="card-column hidden">
+                                <h3>Em que período do dia você rende mais?</h3>
+                                
+                                <div class="checkbox-container">
+                                    <label><input type="radio" name="periodos" value="morning"> Manhã</label>
+                                    <label><input type="radio" name="periodos" value="afternoon"> Tarde</label>
+                                    <label><input type="radio" name="periodos" value="night"> Noite</label>
+                                </div>
+                                <p id="routine-period-error" class="text-danger" role="alert"></p>
+                                <button type="button" id="preference-back-period" class="btn btn-secondary">Voltar</button>
+                            </div>
+                            <div id="duration-panel" class="card-column hidden">
+                                <p id="selected-study-days" class="text-neutral"></p>
+                                <fieldset class="study-time-mode">
+                                    <legend>Como deseja definir o tempo?</legend>
+                                    <label><input type="radio" name="study-time-mode" value="same"> Mesmo tempo em todos os dias</label>
+                                    <label><input type="radio" name="study-time-mode" value="by-day"> Definir um tempo para cada dia</label>
+                                </fieldset>
+                                <div id="shared-study-time-panel" class="card-column">
+                                    <label for="study-time">Tempo diário</label>
+                                    <input type="text" id="study-time" aria-errormessage="routine-time-error" name="study-time" class="input-txt" inputmode="numeric" placeholder="00:30" pattern="[0-9]{2}:[0-5][0-9]" aria-describedby="study-time-help">
+                                    <p id="study-time-help" class="text-neutral">Use HH:MM, de 00:30 a 16:00. Exemplo: 00:30.</p>
+                                </div>
+                                <div id="daily-study-time-panel" class="card-column hidden">
+                                    <div id="daily-study-times" class="card-column"></div>
+                                </div>
+
+                                <p id="routine-time-error" class="text-danger" role="alert"></p>
+                            </div>
+
+                        </div>
+
+                    </div>
+             
+
+                
+            </div>
+        </div>  
+
+        <footer>
+            <P class="text-neutral push-down">Você poderá alterar depois</P>
+            <div class="actions-row">
+                <button type="button" id="questionnaire-days-back" class="btn btn-secondary">Voltar</button>
+                <button type="button" id="questionnaire-days-next" class="btn btn-primary">Continuar</button>
+            </div>
+        </footer>
+    </template>
+    <template data-page="questionnaire-subjects">
+       <header class="header-sequence">
+            <div class="steps">
+                <div class="step" id="rotina-step">
+                    <p>Sua rotina</p>
+                </div>
+                <div class="step active" id="materias-step">
+                    <p>Matérias</p>
+                </div>
+                <div class="step"><p>Configurações do cronograma</p></div>
+                <div class="step" id="revisao-step">
+                    <p>Revisão</p>
+                </div>
+            </div>
+
+            <span class="push-end">Etapa 2 de 4</span>
+        </header>
+
+        <div class="page-body">
+
+            <div class="page-content">
+                <h2>Qual o estudo?</h2>
+                <div class="card-column">
+                    <div id="subjects-list" class="card-column hidden">
+                    </div>
+                    
+                    <div class="actions-row">
+                        <button type="button" id="add-subject" class="btn btn-secondary btn-dashed">+ Adicione seu primeiro conteúdo</button>
+                    </div>
+                    <p id="subjects-error" class="text-danger" role="alert"></p>
+                </div>
+
+
+            </div>
+        </div>
+
+        <footer >
+            <div class="actions-row">
+                <button type="button" id="questionnaire-subjects-back" class="btn btn-secondary">Voltar</button>
+                <button type="button" id="questionnaire-subjects-next" class="btn btn-primary">Configurar cronograma</button>
+            </div>
+        </footer>
+    </template>
+
+    <template data-page="subjects">
+        <header class="page-header">
+            <h1>Matérias</h1>
+        </header>
+
+        <div class="page-body">
+            <div class="page-content">
+                <h2>Conteúdo Existente</h2>
+                <div class="card-column">
+                    <div id="subjects-list" class="card-column hidden"></div>
+                    <div class="actions-row">
+                        <button type="button" id="add-subject" class="btn btn-secondary btn-dashed">+ Adicione seu primeiro conteúdo</button>
+                    </div>
+                    <p id="subjects-error" class="text-danger" role="alert"></p>
+                    <section id="schedule-recalculate-prompt" class="card-column card-accent hidden" aria-live="polite">
+                        <button type="button" class="btn btn-primary" data-page-link="schedule">Atualizar cronograma</button>
+                    </section>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <nav class="actions-row" aria-label="Navegação principal">
+                <button type="button" class="btn btn-primary" data-page-link="subjects" aria-current="page">Matérias</button>
+                <button type="button" class="btn btn-secondary" data-page-link="home">Hoje</button>
+                <button type="button" class="btn btn-secondary" data-page-link="schedule">Cronograma</button>
+            </nav>
+        </footer>
+    </template>
+
+    <template data-page="review-plan">
+        <header class="header-sequence">
+            <div class="steps">
+                <div class="step" id="rotina-step"><p>Sua rotina</p></div>
+                <div class="step" id="materias-step"><p>Matérias</p></div>
+                <div class="step"><p>Configurações do cronograma</p></div>
+                <div class="step active" id="revisao-step"><p>Revisão</p></div>
+            </div>
+            <span class="push-end">Etapa 4 de 4</span>
+        </header>
+        <div class="page-body">
+            <div class="page-content">
+                <div class="questionnaire-container">
+                    <div class="card-row card-accent review-routine">
+                        <div>
+                            <h3>Sua rotina</h3>
+                            <p id="review-days"></p>
+                            <p>Preferência de tempo: <span id="review-preference"></span></p>
+                        </div>
+                        <div class="push-end">
+                            <button type="button" id="review-edit-routine" class="btn btn-terciary">Editar</button>
+                        </div>
+                    </div>
+                    <h3>Matérias</h3>
+                    <div id="review-subjects" class="card-column"></div>
+                    <h3>Cronograma</h3>
+                    <button type="button" class="btn btn-secondary" data-page-link="schedule-settings">Configurações do cronograma</button>
+                    <p id="review-schedule" class="text-neutral" role="status"></p>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <div class="actions-row">
+                <button type="button" id="review-back" class="btn btn-secondary">Voltar</button>
+                <button type="button" id="review-save" class="btn btn-primary">Salvar</button>
+            </div>
+        </footer>
+    </template>
+    <template data-page="schedule-settings">
+
+        <header class="header-sequence">
+            <div class="steps">
+                <div class="step" id="rotina-step"><p>Sua rotina</p></div>
+                <div class="step" id="materias-step"><p>Matérias</p></div>
+                <div class="step active"><p>Configurações do cronograma</p></div>
+                <div class="step" id="revisao-step"><p>Revisão</p></div>
+            </div>
+            <span class="push-end">Etapa 3 de 4</span>
+        </header>
+        <div class="page-body"><div class="page-content">
+            <h2>Configurações do cronograma</h2>
+            <div data-schedule-controls class="card-column"></div>
+        </div></div>
+        <footer><div class="actions-row">
+            <button type="button" class="btn btn-secondary" data-page-link="questionnaire-subjects">Voltar</button>
+            <button type="button" id="schedule-settings-next" class="btn btn-primary">Revisar plano</button>
+        </div></footer>
+    </template>
+    <template id="schedule-controls-template">
+                <section class="card-column card-accent" aria-label="Resumo do cronograma">
+                    <p>Defina quando deseja começar e quantas matérias quer estudar por dia. A janela inclui 30 dias corridos.</p>
+                    <div class="schedule-controls">
+                        <label for="schedule-start-date">Começar o cronograma em</label>
+                        <input type="date" id="schedule-start-date" class="input-txt" required>
+                        <label for="subjects-per-day">Matérias por dia</label>
+                        <input type="number" id="subjects-per-day" class="input-txt" min="1" step="1" value="1" required>
+                    </div>
+                    <p id="schedule-status" class="text-neutral" role="status" aria-live="polite"></p>
+                </section>
+    </template>
+    <template data-page="home">
+        <header class="page-header">
+            <h1>Hoje</h1>
+            <p id="home-date"></p>
+        </header>
+
+        <div class="page-body">
+            <div class="page-content">
+                <section class="card-column card-accent" aria-label="Resumo do dia">
+                    <p id="home-pending-count" aria-live="polite"></p>
+                </section>
+                <section id="home-subject-list" class="card-column" aria-label="Matérias para estudar"></section>
+            </div>
+        </div>
+
+        <footer>
+            <nav class="actions-row" aria-label="Navegação principal">
+                <button type="button" class="btn btn-secondary" data-page-link="subjects">Matérias</button>
+                <button type="button" class="btn btn-primary" data-page-link="home" aria-current="page">Hoje</button>
+                <button type="button" class="btn btn-secondary" data-page-link="schedule">Cronograma</button>
+            </nav>
+        </footer>
+    </template>
+    
+    <template data-page="schedule">
+        <header class="page-header">
+            <h1>Cronograma</h1>
+        </header>
+
+        <div class="page-body">
+            <div class="page-content">
+                <div data-schedule-controls class="card-column"></div>
+                <h2 id="schedule-timeline-title">Linha do tempo</h2>
+                <section id="schedule-list" class="card-column" aria-label="Cronograma de 30 dias"></section>
+                <button type="button" id="schedule-more" class="btn btn-secondary">Mostrar mais</button>
+                <button type="button" class="btn btn-secondary" data-page-link="questionnaire-days">Editar rotina</button>
+            </div>
+        </div>
+
+        <footer>
+            <nav class="actions-row" aria-label="Navegação principal">
+                <button type="button" class="btn btn-secondary" data-page-link="subjects">Matérias</button>
+                <button type="button" class="btn btn-secondary" data-page-link="home">Hoje</button>
+                <button type="button" class="btn btn-primary" data-page-link="schedule" aria-current="page">Cronograma</button>
+            </nav>
+        </footer>
+    </template>
+
+    <template data-page="study-session">
+        <div class="page-body">
+            <div class="page-content">
+                <section class="card-column card-accent pomodoro-content">
+                    <h2 id="session-subject">Matéria</h2>
+                    <p id="session-topic"></p>
+                    <p id="session-planned-duration"></p>
+                    <h2 id="session-cycle"></h2>
+                    <h1 id="session-countdown" class="pomodoro-time" role="timer" aria-live="off">00:00</h1>
+                    <p id="session-next-period" aria-live="polite"></p>
+                    <p id="session-error" class="text-danger" role="alert"></p>
+                    <div class="actions-row study-session-actions">
+                        <button type="button" id="study-session-pause" class="btn btn-secondary">PAUSAR</button>
+                        <button type="button" id="study-session-end" class="btn btn-primary">ENCERRAR</button>
+                    </div>
+                    <button type="button" class="btn btn-terciary" data-page-link="pomodoro-settings">Ajustar foco e pausas</button>
+                </section>
+            </div>
+        </div>
+    </template>
+
+    <template data-page="pomodoro-settings">
+        <div class="page-body">
+            <div class="page-content">
+                <form id="pomodoro-settings-form" class="card-column card-accent pomodoro-content pomodoro-settings-content" novalidate>
+                    <h2>Ajuste de Pomodoro</h2>
+                    <label for="pomodoro-focus">Tempo de foco</label>
+                    <input type="text" id="pomodoro-focus" name="focus" class="input-txt" inputmode="numeric" placeholder="00:25" pattern="[0-9]{2}:[0-5][0-9]" required>
+                    <label for="pomodoro-pause">Tempo de pausa</label>
+                    <input type="text" id="pomodoro-pause" name="pause" class="input-txt" inputmode="numeric" placeholder="00:05" pattern="[0-9]{2}:[0-5][0-9]" required>
+                    <label for="pomodoro-cycles">Ciclos</label>
+                    <input type="number" id="pomodoro-cycles" name="cycles" class="input-txt" min="1" step="1" required>
+                    <p class="text-neutral">Informe durações em horas:minutos, por exemplo 00:25. O foco pode durar de 1 minuto a 8 horas e a pausa até 1 hora.</p>
+                    <p id="pomodoro-settings-error" class="text-danger" role="alert"></p>
+                    <div class="actions-row pomodoro-settings-actions">
+                        <button type="button" id="pomodoro-settings-back" class="btn btn-secondary">Voltar à sessão</button>
+                        <button type="submit" class="btn btn-primary">Salvar configuração</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </template>
+
+    <template data-page="pomodoro-break">
+        <div class="page-body">
+            <div class="page-content">
+                <section class="card-column card-accent pomodoro-content">
+                    <h2>Pausa</h2>
+                    <p id="break-subject"></p>
+                    <p id="break-topic"></p>
+                    <h1 id="break-countdown" class="pomodoro-time" role="timer" aria-live="off">00:00</h1>
+                    <p id="break-next-period" aria-live="polite"></p>
+                    <p id="break-detail"></p>
+                    <p id="break-error" class="text-danger" role="alert"></p>
+                    <div class="actions-row study-session-actions">
+                        <button type="button" id="pomodoro-break-resume" class="btn btn-primary">Retomar sessão</button>
+                        <button type="button" id="pomodoro-break-end" class="btn btn-secondary">ENCERRAR</button>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </template>
+
+    <template data-page="session-ended">
+        <div class="page-body">
+            <div class="page-content">
+                <section class="card-column card-accent session-ended-content">
+                    <h2>Sessão encerrada</h2>
+                    <p id="ended-session-context"></p>
+                    <p id="ended-session-duration"></p>
+                    <p id="ended-session-remaining"></p>
+                    <p id="ended-session-status" role="status"></p>
+
+                    <h3>Qual foi o rendimento da sessão?</h3>
+                    <fieldset class="session-performance">
+                        <legend class="sr-only">Rendimento da sessão</legend>
+                        <label><input type="radio" name="session-performance" value="low"> Baixo</label>
+                        <label><input type="radio" name="session-performance" value="medium"> Médio</label>
+                        <label><input type="radio" name="session-performance" value="good"> Bom</label>
+                    </fieldset>
+                    <p id="session-performance-result" role="status"></p>
+
+                    <h3 id="session-resume-heading">Nota de Retomada</h3>
+                    <label for="session-resume-note" class="sr-only">Nota de Retomada</label>
+                    <textarea id="session-resume-note" class="input-txt session-resume-note" maxlength="200" placeholder="Ex: continuar exercício 8 da página 65"></textarea>
+                    <label class="topic-completion-label"><input type="checkbox" id="session-topic-completed"> Concluir o assunto</label>
+                    <label class="topic-completion-label"><input type="checkbox" id="session-topic-completed-today"> Concluir o assunto por hoje</label>
+                    <p id="session-note-count" class="text-neutral">0/200 caracteres</p>
+                </section>
+            </div>
+        </div>
+        <footer>
+            <div class="actions-row session-ended-actions">
+                <button type="button" id="session-ended-back" class="btn btn-secondary">Voltar</button>
+                <button type="button" id="session-ended-save-home" class="btn btn-primary">Finalizar sessão</button>
+            </div>
+        </footer>
+    </template>
+
+    <dialog id="subject-dialog" class="modal">
+        <form id="subject-form" method="dialog" novalidate class="card-column">
+            <h2 id="subject-dialog-title">Nova matéria</h2>
+            <div class="card-column">
+                <label for="subject-name" class="sr-only">Nome da matéria</label>
+                <input type="text" id="subject-name" class="input-txt" name="subject-name" placeholder="Digite o nome da matéria" aria-describedby="subject-name-error" required>
+                <p id="subject-name-error" class="text-danger" role="alert"></p>
+            </div>
+            <div class="actions-row">
+                <div class="card-column push-left">
+                    <h3>Importância</h3>
+                    <p id="subject-importance-error" class="text-danger" role="alert"></p>
+                    <label><input type="radio" name="importance" required aria-describedby="subject-importance-error" value="low"> Baixa</label>
+                    <label><input type="radio" name="importance" required aria-describedby="subject-importance-error" value="medium"> Média</label>
+                    <label><input type="radio" name="importance" required aria-describedby="subject-importance-error" value="high"> Alta</label>
+                </div>
+                <div class="card-column push-left">
+                    <h3>Dificuldade</h3>
+                    <p id="subject-difficulty-error" class="text-danger" role="alert"></p>
+                    <label><input type="radio" name="difficulty" required aria-describedby="subject-difficulty-error" value="low"> Baixa</label>
+                    <label><input type="radio" name="difficulty" required aria-describedby="subject-difficulty-error" value="medium"> Média</label>
+                    <label><input type="radio" name="difficulty" required aria-describedby="subject-difficulty-error" value="high"> Alta</label>
+                </div>
+            </div>
+            <label for="subject-deadline">Prazo (opcional)</label>
+            <input type="date" id="subject-deadline" class="input-txt" name="subject-deadline">
+            <div class="actions-row">
+                <button type="button" id="subject-dialog-cancel" class="btn btn-secondary">Cancelar</button>
+                <button type="submit" id="subject-submit" class="btn btn-primary">Adicionar matéria</button>
+            </div>
+        </form>
+    </dialog>
+
+    <dialog id="topic-dialog" class="modal">
+        <form id="topic-form" class="card-column">
+            <h2 id="topic-dialog-title">Assuntos da matéria</h2>
+            <div class="topic-input-row">
+                <input type="text" id="topic-name" class="input-txt" name="topic-name" placeholder="Digite um assunto" required>
+                <button type="submit" class="btn btn-primary" aria-label="Adicionar assunto">+</button>
+            </div>
+            <p id="topic-error" class="text-danger" role="alert"></p>
+            <p id="topic-confirmation" class="text-success hidden" aria-live="polite"></p>
+            <button type="button" id="topic-dialog-close" class="btn btn-secondary">Fechar</button>
+        </form>
+    </dialog>
+</body>
+</html>

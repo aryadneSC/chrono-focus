@@ -1,0 +1,35 @@
+/* classes auxiliares para pequenas modificações */
+
+.text-info {
+    color: var(--info-color);
+}
+
+.text-success {
+    color: var(--success-color);
+}
+
+.text-warning {
+    color: var(--warning-color);
+}
+
+.text-danger {
+    color: var(--danger-color);
+}
+
+.text-neutral {
+    color: var(--neutral-color);
+}
+
+.badge-text {
+    background-color: var(--info-color);
+    color: var(--on-primary-color);
+    font-size: var(--font-size-xs);
+}
+
+.card-accent {
+    background-color: var(--surface-color);
+    border: var(--border-width) solid var(--secondary-text-color);
+    border-radius: var(--radius);
+    padding: var(--space-md);
+    gap: var(--space-sm);
+}

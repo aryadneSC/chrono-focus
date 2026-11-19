@@ -1,0 +1,64 @@
+:root {
+    color-scheme: light dark;
+    
+    --background-color: #F8F9FA;
+    --surface-color: #EFECE6;
+    --brighter-surface-color: #FFFFFF;
+    --primary-color: #1d5b79;
+    --on-primary-color: #ffffff;
+    --on-accent-color: #ffffff;
+    --accent-color: #D4AF37;
+    --primary-text-color: #2B2D42;
+    --secondary-text-color: #4b5563;
+    --step-inactive-color: #596579;
+
+
+    --success-color: #3D8061;
+    --warning-color: #d99b26;
+    --danger-color: #9e2a2b;
+    --info-color: #2B7A9E;
+    --neutral-color: #4b5563;
+    --backdrop-color: rgba(0, 0, 0, 0.6);
+
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 0.75rem;
+    --space-lg: 1rem;
+    --space-xl: 1.5rem;
+    --space-2xl: 2.5rem;
+    --space-3x2: 3.5rem;
+
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-h3: 1.125rem;
+    --font-size-h2: 1.375rem;
+    --font-size-h1: 1.75rem;
+
+    --radius: 12px;
+    --border-width: 1px;
+    --border-width-lg: 3px;
+    --header-min-height: 54px;
+    --logo-width: 250px;
+    --modal-width: min(92vw, 420px);
+    --modal-max-height: 90dvh;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background-color: #0F172A;
+        --surface-color: #1E293B;
+        --brighter-surface-color: #2B3A52;
+        --primary-color: #38BDF8;
+        --on-primary-color: #0f172a;
+        --on-accent-color: #0f172a;
+        --accent-color: #EAB308;
+        --primary-text-color: #F1F5F9;
+        --secondary-text-color: #cbd5e1;
+        --step-inactive-color: #a0aec0;
+        --info-color: #7dd3fc;
+        --success-color: #86efac;
+        --danger-color: #fca5a5;
+        --neutral-color: #cbd5e1;
+    }
+}
