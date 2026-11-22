@@ -5,7 +5,7 @@ import { plan, invalidateSchedule } from "../state/scheduleState.js";
 let editingId = null;
 let topicSubjectId = null;
 let editingTopicId = null;
-let renderCurrentList = () => {};
+let renderCurrentList = () => { };
 let dialogsInitialized = false;
 let subjectValidationRequested = false;
 
@@ -188,10 +188,14 @@ function setupSubjects() {
     const hint = document.querySelector("#subjects-hint");
 
     function renderList() {
+        const emptyState = document.querySelector("#subjects-empty-state");
+        const hasSubjects = plan.subjects.length > 0;
+
         list.replaceChildren();
-        list.classList.toggle("hidden", plan.subjects.length === 0);
+        list.classList.toggle("hidden", !hasSubjects);
+        emptyState?.classList.toggle("hidden", hasSubjects);
         hint?.classList.toggle("hidden", plan.subjects.length >= 2);
-        addButton.textContent = plan.subjects.length ? "+ Adicionar matéria" : "+ Adicione sua primeira matéria";
+        addButton.textContent = hasSubjects ? "+ Adicionar matéria" : "+ Adicione sua primeira matéria";
 
         plan.subjects.forEach((subject) => {
             normalizeTopics(subject);

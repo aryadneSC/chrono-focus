@@ -1,8 +1,10 @@
 import { registerPageSetup, navigate } from "./router.js";
 import { pageType } from "../util/enum.js";
 import { formatTimerDuration } from "../util/studyTimer.js";
-import { startStudySession as startTimer, ensureStudySession, getStudyTimerState, refreshStudyTimer,
-    subscribeStudyTimer, updateStudySessionDraft, restoreFromPomodoroSettings } from "../state/studyTimer.js";
+import {
+    startStudySession as startTimer, ensureStudySession, getStudyTimerState, refreshStudyTimer,
+    subscribeStudyTimer, updateStudySessionDraft, restoreFromPomodoroSettings
+} from "../state/studyTimer.js";
 
 export function showStudyTimer() {
     const state = getStudyTimerState();
@@ -24,6 +26,22 @@ function nextPeriodText(state) {
     return `Próximo período: ${next.type === "break" ? "pausa" : "foco"} de ${duration}`;
 }
 
+function updatePomodoroRing(countdownEl, state) {
+    const ringEl = countdownEl?.closest(".pomodoro-ring");
+    if (!ringEl) return;
+    if (!state) {
+        ringEl.style.setProperty("--progress", "1");
+        return;
+    }
+    const remaining = Math.max(0, state.phaseRemainingMs || 0);
+    const total = state.phaseDurationMs
+        || (state.phase === "break" ? state.breakDurationMs : state.focusDurationMs)
+        || state.allocatedMs
+        || remaining;
+    const progress = total > 0 ? Math.max(0, Math.min(1, remaining / total)) : 0;
+    ringEl.style.setProperty("--progress", String(progress));
+}
+
 function renderTimer(state) {
     const focus = document.querySelector("#session-subject");
     const pause = document.querySelector("#break-subject");
@@ -41,7 +59,9 @@ function renderTimer(state) {
         document.querySelector("#session-planned-duration").textContent = state
             ? `Foco destinado à matéria: ${formatTimerDuration(state.allocatedMs)}` : "Inicie uma sessão informando a matéria e o tempo destinado a ela.";
         document.querySelector("#session-cycle").textContent = state ? `Bloco ${state.cycle} de ${state.cycleLimit}` : "";
-        document.querySelector("#session-countdown").textContent = formatTimerDuration(state?.phaseRemainingMs || 0);
+        const countdownEl = document.querySelector("#session-countdown");
+        countdownEl.textContent = formatTimerDuration(state?.phaseRemainingMs || 0);
+        updatePomodoroRing(countdownEl, state);
         document.querySelector("#study-session-pause").disabled = !state;
         document.querySelector("#study-session-pause").textContent = state?.paused ? "RETOMAR" : "PAUSAR";
         document.querySelector("#study-session-pause").setAttribute("aria-pressed", String(Boolean(state?.paused)));
@@ -52,7 +72,9 @@ function renderTimer(state) {
         document.querySelector("#break-topic").textContent = state?.topicName || "";
         document.querySelector("#break-next-period").textContent = nextPeriodText(state);
         document.querySelector("#pomodoro-break-resume").textContent = state?.paused ? "Retomar pausa" : "Retomar sessão";
-        document.querySelector("#break-countdown").textContent = formatTimerDuration(state?.phaseRemainingMs || 0);
+        const breakCountdownEl = document.querySelector("#break-countdown");
+        breakCountdownEl.textContent = formatTimerDuration(state?.phaseRemainingMs || 0);
+        updatePomodoroRing(breakCountdownEl, state);
         document.querySelector("#break-detail").textContent = state?.focusBlockRemainingMs
             ? `Foco preservado neste bloco: ${formatTimerDuration(state.focusBlockRemainingMs)}.` : "A pausa será seguida pelo próximo bloco de foco.";
     }

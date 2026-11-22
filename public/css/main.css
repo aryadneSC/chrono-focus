@@ -1,11 +1,12 @@
-@layer framework, settings, base, layout, components, pages, utilities;
+@layer normalize, settings, base, layout, components, pages, utilities;
 
-@import url("https://matcha.mizu.sh/matcha.css") layer(framework);
-@import url("./settings.css") layer(settings);
-@import url("./base.css") layer(base);
-@import url("./layout.css") layer(layout);
-@import url("./components.css") layer(components);
-@import url("./pages.css") layer(pages);
+@import url("https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.min.css") layer(normalize);
+@import url("./radix-colors.css?v=2") layer(settings);
+@import url("./settings.css?v=2") layer(settings);
+@import url("./base.css?v=2") layer(base);
+@import url("./layout.css?v=2") layer(layout);
+@import url("./components.css?v=2") layer(components);
+@import url("./pages.css?v=2") layer(pages);
 @import url("./utilities.css") layer(utilities);
 
 :root {

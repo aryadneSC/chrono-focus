@@ -1,62 +1,109 @@
 /* componentes específicos como card, botões, formulários e modais */
 
-.input-txt, select {
+.input-txt,
+select {
     padding: var(--space-md) var(--space-lg);
-    border: 0;
+    border: var(--border-width) solid var(--border-control);
     border-radius: var(--radius);
     font: inherit;
-    cursor: pointer;
+    cursor: text;
     background-color: var(--brighter-surface-color);
     margin-block: var(--space-xs);
     color: var(--primary-text-color);
+    width: 100%;
 }
 
 .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     padding: var(--space-md) var(--space-lg);
-    border: 0;
+    border: var(--border-width) solid transparent;
     border-radius: var(--radius);
     font: inherit;
+    font-weight: 600;
     cursor: pointer;
     color: var(--primary-text-color);
     margin-block: var(--space-xs);
-
+    min-width: 44px;
+    min-height: 44px;
+    transition: background-color 0.15s ease, color 0.15s ease, transform 0.12s ease, border-color 0.15s ease;
 }
 
+.btn:active {
+    transform: translateY(0);
+}
+
+/* Passos do Radix: 9 = sólido, 10 = hover, 8 = borda do sólido */
 .btn-primary {
     background-color: var(--primary-color);
     color: var(--on-primary-color);
+    border-color: var(--primary-border);
+    font-weight: 700;
 }
 
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-1px);
+}
+
+/* Passos do Radix: 3 = normal, 4 = hover, 5 = ativo, 7 = borda */
 .btn-secondary {
-    background: transparent;
-    border: var(--border-width) solid var(--primary-text-color); 
+    background-color: var(--component-bg);
+    border: var(--border-width) solid var(--border-strong);
+    color: var(--primary-text-color);
+}
+
+.btn-secondary:hover {
+    background-color: var(--component-bg-hover);
+}
+
+.btn-secondary:active {
+    background-color: var(--component-bg-active);
 }
 
 .btn-dashed {
-    border: var(--border-width) dashed var(--primary-text-color); 
-}
-
-.choose-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-sm);
+    border-style: dashed;
+    border-color: var(--border-control);
+    background-color: transparent;
 }
 
 .btn-choose {
     background-color: var(--surface-color);
+    border: var(--border-width) solid var(--border-strong);
     width: 100%;
-    padding: var(--space-2xl) var(--space-lg);
+    padding: var(--space-xl) var(--space-lg);
 }
 
+.btn-choose:hover,
+.btn-choose[aria-expanded="true"] {
+    background-color: var(--primary-soft);
+    border-color: var(--primary-text);
+}
 
 .btn-terciary {
     background: none;
     border: none;
     text-decoration: underline;
+    text-underline-offset: 3px;
+    color: var(--secondary-text-color);
+    font-weight: 500;
+}
+
+.btn-terciary:hover {
+    color: var(--primary-text-color);
+}
+
+/* Botão grande para a ação única de uma tela (ex.: Começar) */
+.btn-lg {
+    padding: var(--space-lg) var(--space-2xl);
+    font-size: var(--font-size-h3);
+    border-radius: var(--radius-pill);
+    min-height: 56px;
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 .checkbox-container {
@@ -70,28 +117,39 @@
     align-items: center;
     min-height: 44px;
     gap: var(--space-xs);
+    cursor: pointer;
 }
 
 .checkbox-button {
     padding: var(--space-sm) var(--space-md);
-    background-color: var(--surface-color);
+    background-color: var(--component-bg);
     white-space: nowrap;
-    border: 0;
+    border: var(--border-width) solid var(--border-strong);
     border-radius: var(--radius);
     font: inherit;
+    font-weight: 600;
     cursor: pointer;
     color: var(--primary-text-color);
+    min-width: 44px;
+    min-height: 44px;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+}
+
+.checkbox-button:hover {
+    background-color: var(--component-bg-hover);
 }
 
 .checkbox-button[aria-pressed="true"] {
-    color: var(--on-accent-color);
+    background-color: var(--primary-color);
+    color: var(--on-primary-color);
+    border-color: var(--primary-text);
 }
 
 .actions-row {
     width: 100%;
     display: grid;
     grid-auto-flow: column;
-    gap: var(--space-xl);
+    gap: var(--space-md);
     text-align: center;
     align-items: center;
     grid-auto-rows: min-content;
@@ -105,46 +163,15 @@
     width: var(--modal-width);
     max-height: var(--modal-max-height);
     padding: var(--space-xl);
-    border: var(--border-width) solid var(--secondary-text-color);
+    border: 1px solid var(--border-subtle);
     border-radius: var(--radius);
     background-color: var(--surface-color);
+    color: var(--primary-text-color);
+    overflow-y: auto;
 }
 
 .modal::backdrop {
     background-color: var(--backdrop-color);
-}
-
-
-
-
-/* Controles do questionário */
-.btn,
-.checkbox-button {
-    min-width: 44px;
-    min-height: 44px;
-}
-
-.checkbox-button[aria-pressed="true"] {
-    background-color: var(--primary-color);
-    color: var(--on-primary-color);
-}
-
-input[type="radio"]:hover, label:has(input[type="radio"]):hover{
-    text-decoration: underline;
-    cursor: pointer;
-}
-
-.btn:focus-visible,
-.checkbox-button:focus-visible,
-.input-txt:focus-visible,
-select:focus-visible {
-    outline: 3px solid var(--accent-color);
-    outline-offset: 2px;  
-}
-
-.modal {
-    overflow-y: auto;
-    color: var(--primary-text-color);
 }
 
 .modal .actions-row {
@@ -153,26 +180,58 @@ select:focus-visible {
 
 .modal input[type="radio"],
 .modal input[type="checkbox"] {
-    min-width: 20px;
-    min-height: 20px;
+    min-width: 18px;
+    min-height: 18px;
+    accent-color: var(--primary-text);
 }
 
 .modal label {
-    min-height: 44px;
+    min-height: 40px;
     display: flex;
     align-items: center;
-    gap: var(--space-xs);
+    gap: var(--space-sm);
+    cursor: pointer;
 }
 
-.review-actions {
-    display: flex;
-    justify-content: space-between;
-    gap: var(--space-sm);
-    flex-wrap: wrap;
+.modal fieldset,
+.page-content>fieldset {
+    border: 0;
+    padding: 0;
+    margin: 0 0 var(--space-md) 0;
+}
+
+.page-content>fieldset>legend,
+.modal legend {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-h2);
+    line-height: var(--line-height-h2);
+    letter-spacing: var(--letter-spacing-h2);
+    font-weight: 700;
+    color: var(--primary-text-color);
+    margin-bottom: var(--space-sm);
+    padding: 0;
+}
+
+.modal legend {
+    font-family: var(--font-body);
+    font-size: var(--font-size-h3);
+    line-height: var(--line-height-h3);
+    letter-spacing: normal;
+    font-weight: 650;
+}
+
+.btn:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+.checkbox-button:focus-visible,
+.input-txt:focus-visible,
+select:focus-visible {
+    outline: 3px solid var(--accent-color);
+    outline-offset: 2px;
 }
 
 .review-subject {
-    border-bottom: 1px solid var(--secondary-text-color);
+    border-bottom: 1px solid var(--border-subtle);
     padding-block: var(--space-sm);
 }
 
@@ -182,20 +241,14 @@ select:focus-visible {
 
 .review-routine {
     justify-content: space-between;
+    align-items: flex-start;
     gap: var(--space-sm);
 }
 
-.subject-list-item {
+.subject-list-item,
+.schedule-day,
+.home-session {
     margin-block: var(--space-sm);
-}
-
-.subject-list-item p,
-.review-subject p {
-    overflow-wrap: anywhere;
-}
-
-.review-subject,
-.subject-list-item {
     overflow-wrap: anywhere;
 }
 
@@ -228,7 +281,7 @@ select:focus-visible {
 .topic-input-row {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
-    align-items: start;
+    align-items: center;
     gap: var(--space-sm);
 }
 
@@ -237,23 +290,6 @@ select:focus-visible {
     grid-template-columns: minmax(0, 1fr);
     gap: var(--space-xs);
     margin-block: var(--space-md);
-}
-
-.test-session-card {
-    margin-block: var(--space-lg);
-}
-
-.pomodoro-settings-content {
-    align-items: stretch;
-    text-align: start;
-}
-
-.pomodoro-settings-content h2 {
-    text-align: center;
-}
-
-.pomodoro-settings-actions {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .study-time-mode {
@@ -266,8 +302,8 @@ select:focus-visible {
 .study-time-mode label {
     display: flex;
     align-items: center;
-    gap: var(--space-xs);
-    min-height: 44px;
+    gap: var(--space-sm);
+    min-height: 40px;
 }
 
 .daily-study-time-row {
@@ -277,22 +313,17 @@ select:focus-visible {
     gap: var(--space-md);
 }
 
-.daily-study-time-row label {
-    font-weight: 600;
-}
-
-.hidden {
-    display: none !important;
-}
-
+/* =========================================================
+   ANEL CIRCULAR POMODORO (KLEPSYDRA DIAL)
+   ========================================================= */
 .pomodoro-content,
 .session-ended-content {
     gap: var(--space-md);
     max-width: 520px;
 }
 
-.page-content > .pomodoro-content,
-.page-content > .session-ended-content {
+.page-content>.pomodoro-content,
+.page-content>.session-ended-content {
     max-width: 520px;
 }
 
@@ -301,17 +332,65 @@ select:focus-visible {
     text-align: center;
 }
 
+.pomodoro-ring {
+    position: relative;
+    width: min(240px, 65vw);
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+    margin-block: var(--space-md);
+}
+
+.pomodoro-ring-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.pomodoro-ring-track {
+    fill: var(--brighter-surface-color);
+    stroke: var(--component-bg-active);
+    stroke-width: 10;
+}
+
+.pomodoro-ring-progress {
+    fill: none;
+    stroke: var(--accent-color);
+    /* tomato: o próprio "pomodoro" */
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 100;
+    stroke-dashoffset: calc(100 - (var(--progress, 1) * 100));
+    transition: stroke-dashoffset 0.5s linear, stroke 0.3s ease;
+}
+
+.pomodoro-ring.is-break .pomodoro-ring-progress {
+    stroke: var(--success-solid);
+}
+
 .pomodoro-time {
-    font-size: clamp(3rem, 18vw, 6rem);
+    position: relative;
+    z-index: 1;
+    display: block;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    font-size: clamp(2.5rem, 10vw, 3.75rem);
     line-height: 1;
-    margin-block: var(--space-lg);
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    color: var(--primary-text-color);
 }
 
-.study-session-actions {
+.study-session-actions,
+.pomodoro-settings-actions {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
 }
 
-.pomodoro-content > .btn-terciary {
+.pomodoro-content>.btn-terciary {
     align-self: center;
 }
 
@@ -328,11 +407,11 @@ select:focus-visible {
     display: inline-flex;
     align-items: center;
     gap: var(--space-xs);
-    min-height: 44px;
+    min-height: 40px;
 }
 
 .session-resume-note {
-    min-height: 8rem;
+    min-height: 7rem;
     resize: vertical;
     font-family: inherit;
 }
@@ -349,34 +428,10 @@ select:focus-visible {
     border: 0;
 }
 
-.schedule-day,
-.home-session {
-    margin-block: var(--space-md);
-    overflow-wrap: anywhere;
-}
-
 #schedule-list,
 #home-subject-list {
     width: 100%;
     max-width: 720px;
-}
-
-#routine-time-error,
-#routine-preference-error,
-#subjects-error {
-    overflow-wrap: anywhere;
-}
-
-#activity > footer nav.actions-row {
-    gap: var(--space-sm);
-}
-
-#activity > footer nav .btn {
-    padding-inline: var(--space-xs);
-}
-
-#activity > footer .session-ended-actions {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .subject-completed {
@@ -386,25 +441,113 @@ select:focus-visible {
 .topic-completed,
 .topic-incomplete {
     color: var(--primary-text-color);
-    border-inline-start: 3px solid var(--primary-color);
+    border-inline-start: 3px solid var(--success-solid);
     padding-inline-start: var(--space-sm);
     font-weight: 600;
 }
 
 .topic-incomplete {
-    border-inline-start-color: var(--secondary-text-color);
+    border-inline-start-color: var(--border-control);
 }
 
 .topic-completion-label {
     display: flex;
     align-items: center;
     gap: var(--space-sm);
-    min-height: 44px;
+    min-height: 40px;
 }
 
-@media (max-width: 480px) {
-    .steps .step p {
-        font-size: var(--font-size-xs);
-        overflow-wrap: anywhere;
-    }
+/* Navegação principal: a aba atual não é uma "ação", então usa o tom suave do amber
+   (passos 3 e 7) mais uma barra de progresso/foco em tomato, em vez do botão sólido. */
+nav[aria-label="Navegação principal"] .btn[aria-current="page"] {
+    background-color: var(--primary-soft);
+    border-color: var(--primary-border);
+    color: var(--primary-text-color);
+    box-shadow: inset 0 -3px 0 var(--accent-color);
+    transform: none;
+}
+
+nav[aria-label="Navegação principal"] .btn[aria-current="page"]:hover {
+    background-color: var(--primary-soft);
+}
+
+/*
+* Área estética tipo caderno de estudos
+*/
+.editorial-subtitle {
+    font-family: var(--font-editorial);
+    font-style: italic;
+    font-size: var(--font-size-h3);
+    line-height: 1.35;
+    color: var(--secondary-text-color);
+    margin-top: calc(var(--space-xs) * -1);
+    margin-bottom: var(--space-md);
+}
+
+.roman-divider {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    width: 100%;
+    margin-block: var(--space-md);
+    color: var(--primary-text);
+    font-size: var(--font-size-xs);
+    opacity: 0.75;
+}
+
+.roman-divider::before,
+.roman-divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-strong), transparent);
+}
+
+.empty-state-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-sm);
+    padding: var(--space-2xl) var(--space-xl);
+    background: var(--bg-editorial-glow), var(--surface-color);
+    border: 1px dashed var(--primary-border);
+    border-radius: var(--radius);
+    margin-block: var(--space-md);
+}
+
+.empty-state-icon {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    border-radius: var(--radius-pill);
+    background-color: var(--primary-soft);
+    color: var(--primary-text);
+    border: 1px solid var(--primary-border);
+    margin-bottom: var(--space-xs);
+}
+
+.empty-state-icon svg {
+    width: 22px;
+    height: 22px;
+}
+
+.empty-state-card h3 {
+    font-family: var(--font-heading);
+    margin: 0;
+    color: var(--primary-text-color);
+}
+
+.empty-state-card p {
+    max-width: 38ch;
+    margin: 0;
+}
+
+.icon-inline {
+    width: 18px;
+    height: 18px;
+    vertical-align: -3px;
+    margin-inline-end: var(--space-xs);
+    color: var(--primary-text);
 }

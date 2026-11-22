@@ -1,47 +1,69 @@
-/* defin a aparência padrão dos elementos HTML estilos fundamentais */
+/* define a aparência padrão dos elementos HTML e estilos fundamentais */
 
 * {
     box-sizing: border-box;
 }
 
 body {
-   background-color: var(--background-color); 
-   color: var(--primary-text-color);
-   font-family: Arial, Helvetica, sans-serif;
-   margin: 0;
+    background-color: var(--background-color);
+    color: var(--primary-text-color);
+    font-family: var(--font-body);
+    line-height: var(--line-height-body);
+    -webkit-font-smoothing: antialiased;
+    margin: 0;
 }
-
 
 h1,
 h2,
 h3,
-p{
+p {
     margin: 0;
-    background-color: inherit;  
+    background-color: inherit;
 }
 
+/* Hierarquia: quanto maior o título, menor a altura de linha e o espaçamento entre letras
+   (princípio da escala tipográfica do Radix Themes). Só h1 e h2 usam a fonte de título. */
 h1, h2, h3 {
     color: var(--primary-text-color);
     margin-bottom: var(--space-sm);
     margin-top: var(--space-lg);
-
+    border-bottom: 0;
+    padding-bottom: 0;
+    text-wrap: balance;
 }
 
 h1 {
+    font-family: var(--font-heading);
     font-size: var(--font-size-h1);
+    line-height: var(--line-height-h1);
+    letter-spacing: var(--letter-spacing-h1);
+    font-weight: 700;
 }
 
 h2 {
+    font-family: var(--font-heading);
     font-size: var(--font-size-h2);
+    line-height: var(--line-height-h2);
+    letter-spacing: var(--letter-spacing-h2);
+    font-weight: 700;
 }
 
 h3 {
     font-size: var(--font-size-h3);
+    line-height: var(--line-height-h3);
+    font-weight: 650;
 }
 
 p {
     color: var(--secondary-text-color);
     margin-block: var(--space-xs);
     font-size: var(--font-size-base);
+    text-wrap: pretty;
 }
 
+/* Textos de apoio ficam menores e mais discretos para não competirem com títulos e botões */
+small,
+.text-neutral {
+    font-size: var(--font-size-sm);
+    line-height: 1.4;
+}

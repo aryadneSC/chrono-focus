@@ -1,9 +1,9 @@
 import { registerPageSetup } from "./router.js";
 import { pageType } from "../util/enum.js";
 import { plan } from "../state/scheduleState.js";
-
 import { getTopics, topicStatus } from "../util/topics.js";
 import { formatLocalDate } from "../util/dates.js";
+import { notifyAutomation } from "../util/automationWebhook.js";
 
 const dayNames = { seg: "Segunda-feira", ter: "Terça-feira", qua: "Quarta-feira", qui: "Quinta-feira", sex: "Sexta-feira", sab: "Sábado", dom: "Domingo" };
 const periodNames = { morning: "Manhã", afternoon: "Tarde", night: "Noite" };
@@ -24,7 +24,31 @@ function setupReview() {
         : `${plan.studyTime || "Não informado"} por dia`;
     const period = plan.preference === "period" ? `${periodNames[plan.periods[0]] || "Período não selecionado"} · ` : "";
     document.querySelector("#review-preference").textContent = `${period}${time}`;
-    document.querySelector("#review-save").textContent = plan.scheduleSettingsVisited ? "Salvar" : "Configurar cronograma";
+
+    const saveButton = document.querySelector("#review-save");
+    if (saveButton) {
+        saveButton.textContent = plan.scheduleSettingsVisited ? "Salvar" : "Configurar cronograma";
+        saveButton.onclick = () => {
+            if (!plan.scheduleSettingsVisited) return;
+            notifyAutomation("plan_saved", {
+                days: plan.days,
+                studyTimeMode: plan.studyTimeMode,
+                studyTime: plan.studyTime,
+                studyTimeByDay: plan.studyTimeByDay,
+                scheduleStartDate: plan.scheduleStartDate,
+                subjectsPerDay: plan.subjectsPerDay,
+                subjectsCount: plan.subjects.length,
+                subjects: plan.subjects.map((s) => ({
+                    id: s.id,
+                    name: s.name,
+                    importance: s.importance || s.priority,
+                    difficulty: s.difficulty,
+                    deadline: s.deadline || "",
+                })),
+            });
+        };
+    }
+
     document.querySelector("#review-schedule").textContent = plan.scheduleGenerated
         ? "Cronograma atualizado. Você pode consultar os 30 dias na aba Cronograma."
         : plan.scheduleSettingsVisited
@@ -60,8 +84,6 @@ function setupReview() {
         }
         subjectsContainer.append(card);
     });
-
-
 }
 
 registerPageSetup(pageType.REVIEW_PLAN, setupReview);

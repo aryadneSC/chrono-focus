@@ -21,15 +21,39 @@
 }
 
 .badge-text {
-    background-color: var(--info-color);
-    color: var(--on-primary-color);
+    background-color: var(--info-bg);
+    color: var(--info-color);
+    border: 1px solid var(--info-border);
     font-size: var(--font-size-xs);
+    font-weight: 600;
 }
 
 .card-accent {
     background-color: var(--surface-color);
-    border: var(--border-width) solid var(--secondary-text-color);
+    border: 1px solid var(--border-subtle);
+    border-inline-start: 4px solid var(--primary-color);
     border-radius: var(--radius);
-    padding: var(--space-md);
+    padding: var(--space-lg);
     gap: var(--space-sm);
+    box-shadow: var(--shadow-card);
+}
+
+.card-accent[data-area="exatas"] {
+    border-inline-start-color: var(--subject-exatas);
+}
+
+.card-accent[data-area="humanas"] {
+    border-inline-start-color: var(--subject-humanas);
+}
+
+.card-accent[data-area="biologicas"] {
+    border-inline-start-color: var(--subject-biologicas);
+}
+
+.card-accent[data-area="idiomas"] {
+    border-inline-start-color: var(--subject-idiomas);
+}
+
+.card-accent[data-alert="true"] {
+    border-inline-start-color: var(--danger-solid);
 }
