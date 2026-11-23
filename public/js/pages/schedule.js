@@ -21,10 +21,10 @@ function setupSchedule() {
         list.replaceChildren();
         more.hidden = !plan.scheduleGenerated || visibleDays >= plan.schedule.length;
         if (!plan.scheduleGenerated) {
-            controls.status.textContent = plan.schedule.length ? "O cronograma está desatualizado. Atualize para usar as alterações." : "Configure sua rotina e matérias e atualize o cronograma.";
+            controls.status.textContent = plan.schedule.length ? "O cronograma envelheceu. Atualize para usar as alterações." : "Configure a rotina e as disciplinas, depois trace o cronograma.";
             return;
         }
-        controls.status.textContent = ["Cronograma de 30 dias gerado.", ...plan.scheduleWarnings].join(" ");
+        controls.status.textContent = ["Cronograma de 30 dias pronto.", ...plan.scheduleWarnings].join(" ");
         for (const day of plan.schedule.slice(0, visibleDays)) {
             const card = document.createElement("section");
             card.className = "card-column card-accent schedule-day";
@@ -49,7 +49,7 @@ function setupSchedule() {
             }
             if (!count) {
                 const empty = document.createElement("p");
-                empty.textContent = day.isStudyDay ? "Sem matérias pendentes." : "Dia de descanso.";
+                empty.textContent = day.isStudyDay ? "Sem disciplinas pendentes." : "Dia de descanso.";
                 card.append(empty);
             }
             list.append(card);

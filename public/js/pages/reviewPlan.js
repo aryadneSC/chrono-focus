@@ -4,6 +4,7 @@ import { plan } from "../state/scheduleState.js";
 import { getTopics, topicStatus } from "../util/topics.js";
 import { formatLocalDate } from "../util/dates.js";
 import { notifyAutomation } from "../util/automationWebhook.js";
+import { toRoman } from "../util/roman.js";
 
 const dayNames = { seg: "Segunda-feira", ter: "Terça-feira", qua: "Quarta-feira", qui: "Quinta-feira", sex: "Sexta-feira", sab: "Sábado", dom: "Domingo" };
 const periodNames = { morning: "Manhã", afternoon: "Tarde", night: "Noite" };
@@ -27,7 +28,7 @@ function setupReview() {
 
     const saveButton = document.querySelector("#review-save");
     if (saveButton) {
-        saveButton.textContent = plan.scheduleSettingsVisited ? "Salvar" : "Configurar cronograma";
+        saveButton.textContent = plan.scheduleSettingsVisited ? "Gravar plano" : "Configurar cronograma";
         saveButton.onclick = () => {
             if (!plan.scheduleSettingsVisited) return;
             notifyAutomation("plan_saved", {
@@ -50,16 +51,16 @@ function setupReview() {
     }
 
     document.querySelector("#review-schedule").textContent = plan.scheduleGenerated
-        ? "Cronograma atualizado. Você pode consultar os 30 dias na aba Cronograma."
+        ? "Cronograma traçado. Os 30 dias esperam por você na aba Cronograma."
         : plan.scheduleSettingsVisited
-            ? `Ao salvar: 30 dias a partir de ${formatLocalDate(plan.scheduleStartDate)}, com até ${plan.subjectsPerDay} matérias por dia, considerando os assuntos pendentes.`
-            : "Defina as configurações do cronograma antes de salvar a revisão.";
+            ? `Ao gravar: 30 dias a partir de ${formatLocalDate(plan.scheduleStartDate)}, com até ${plan.subjectsPerDay} disciplinas por dia, considerando os assuntos pendentes.`
+            : "Defina as configurações do cronograma antes de gravar a revisão.";
 
     const subjectsContainer = document.querySelector("#review-subjects");
     subjectsContainer.replaceChildren();
     plan.subjects.forEach((subject, index) => {
         const card = element("article", "", "card-column card-accent review-subject");
-        const heading = element("h3", `${index + 1}. ${subject.name}`);
+        const heading = element("h3", `${toRoman(index + 1)}. ${subject.name}`);
         const actions = element("div", "", "review-actions");
         for (const [action, label] of [["remove-subject", "Excluir"], ["edit-subject", "Editar"]]) {
             const button = element("button", label, "btn btn-terciary");

@@ -41,6 +41,8 @@ export function createStudyTimer({ now = Date.now, getConfig }) {
         }
         state.phase = "focus";
         state.phaseRemainingMs = state.focusBlockRemainingMs;
+        // Duração de referência do bloco: é o que enche a ampulheta no início.
+        state.phaseDurationMs = state.phaseRemainingMs;
         state.lastUpdatedAt = at;
         state.deadline = at + state.phaseRemainingMs;
     }
@@ -50,6 +52,7 @@ export function createStudyTimer({ now = Date.now, getConfig }) {
         if (!duration) { beginFocus(at, state.focusBlockRemainingMs > 0); return; }
         state.phase = "break";
         state.phaseRemainingMs = duration;
+        state.phaseDurationMs = duration;
         state.lastUpdatedAt = at;
         state.deadline = at + duration;
     }

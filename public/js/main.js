@@ -1,4 +1,5 @@
 import { navigate } from "./pages/router.js";
+import { initUI } from "./util/ui.js";
 import { pageType } from "./util/enum.js";
 import { plan, invalidateSchedule } from "./state/scheduleState.js";
 import { validateRoutineForm } from "./pages/questionnaireDays.js";
@@ -13,6 +14,7 @@ import { pauseStudySession, resumeStudySession, endStudySession, returnFromSessi
 import { regenerateSchedule } from "./state/scheduleService.js";
 import { validateScheduleConfig } from "./util/scheduleConfig.js";
 
+initUI();
 navigate(pageType.WELCOME);
 
 document.addEventListener("click", (event) => {
@@ -30,14 +32,15 @@ document.addEventListener("click", (event) => {
     }
     switch (button.id) {
         case "welcome-start": navigate(pageType.QUESTIONNAIRE_DAYS); break;
-        case "questionnaire-days-back": navigate(pageType.WELCOME); break;
+        case "questionnaire-days-back": initUI();
+navigate(pageType.WELCOME); break;
         case "questionnaire-days-next":
             if (validateRoutineForm()) navigate(pageType.QUESTIONNAIRE_SUBJECTS);
             break;
         case "questionnaire-subjects-back": navigate(pageType.QUESTIONNAIRE_DAYS); break;
         case "questionnaire-subjects-next":
             if (plan.subjects.length < 2) {
-                document.querySelector("#subjects-error").textContent = "Adicione pelo menos 2 matérias para revisar o plano.";
+                document.querySelector("#subjects-error").textContent = "Grave pelo menos 2 disciplinas para revisar o plano.";
                 document.querySelector("#add-subject").focus();
             } else navigate(pageType.SCHEDULE_SETTINGS);
             break;

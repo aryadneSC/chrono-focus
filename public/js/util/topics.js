@@ -1,4 +1,5 @@
 import { localDateValue } from "./dates.js";
+import { createId } from "./id.js";
 
 // Legacy strings become stable objects once normalized and persisted; duplicate names remain distinct.
 export function getTopics(subject, includeArchived = false) {
@@ -59,7 +60,7 @@ function mutableTopic(subject, topicId) {
     return topic;
 }
 
-export function completeTopicForDay(subject, topicId, date = localDateValue(), eventId = crypto.randomUUID()) {
+export function completeTopicForDay(subject, topicId, date = localDateValue(), eventId = createId()) {
     const topic = mutableTopic(subject, topicId);
     if (!topic || topicStatus(topic, date).completed) return false;
     topic.dailyCompletions ||= [];
@@ -68,7 +69,7 @@ export function completeTopicForDay(subject, topicId, date = localDateValue(), e
     return true;
 }
 
-export function changeTopicStatus(subject, topicId, completed, date = localDateValue(), eventId = crypto.randomUUID()) {
+export function changeTopicStatus(subject, topicId, completed, date = localDateValue(), eventId = createId()) {
     const topic = mutableTopic(subject, topicId);
     if (!topic) return false;
     if (topic.events.some((event) => event.id === eventId)) return false;

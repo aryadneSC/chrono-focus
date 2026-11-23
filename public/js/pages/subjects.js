@@ -1,6 +1,8 @@
 import { registerPageSetup } from "./router.js";
 import { pageType } from "../util/enum.js";
 import { plan, invalidateSchedule } from "../state/scheduleState.js";
+import { createId } from "../util/id.js";
+import { subjectColor } from "../util/colors.js";
 
 let editingId = null;
 let topicSubjectId = null;
@@ -47,8 +49,8 @@ export function showSubjectEditor(id = null) {
     subjectValidationRequested = false;
     for (const field of ["name", "importance", "difficulty"]) document.querySelector(`#subject-${field}-error`).textContent = "";
     form.querySelectorAll("[aria-invalid]").forEach((input) => input.removeAttribute("aria-invalid"));
-    document.querySelector("#subject-dialog-title").textContent = subject ? "Editar" : "Nova matéria";
-    document.querySelector("#subject-submit").textContent = subject ? "Salvar" : "Adicionar";
+    document.querySelector("#subject-dialog-title").textContent = subject ? "Editar matéria" : "Gravar matéria";
+    document.querySelector("#subject-submit").textContent = subject ? "Gravar alterações" : "Gravar matéria";
     if (subject) {
         form.elements["subject-name"].value = subject.name;
         form.elements["subject-deadline"].value = subject.deadline || "";
@@ -130,7 +132,7 @@ function setupDialogs() {
 
         const previous = plan.subjects.find((item) => item.id === editingId);
         const subject = {
-            id: editingId || crypto.randomUUID(),
+            id: editingId || createId(),
             name,
             importance: String(data.get("importance") || ""),
             difficulty: String(data.get("difficulty") || ""),
@@ -165,7 +167,7 @@ function setupDialogs() {
         }
 
         normalizeTopics(subject);
-        if (editingTopicId === null) subject.topics.push({ id: crypto.randomUUID(), name: topic, events: [] });
+        if (editingTopicId === null) subject.topics.push({ id: createId(), name: topic, events: [] });
         else {
             const existing = subject.topics.find((item) => item.id === editingTopicId);
             if (existing) existing.name = topic;
@@ -173,7 +175,7 @@ function setupDialogs() {
         invalidateSchedule();
         delete subject.topic;
         topicInput.value = "";
-        document.querySelector("#topic-confirmation").textContent = `“${topic}” foi adicionado a ${subject.name}.`;
+        document.querySelector("#topic-confirmation").textContent = `“${topic}” foi gravado no codex de ${subject.name}.`;
         document.querySelector("#topic-confirmation").classList.remove("hidden");
         document.querySelector("#topic-error").textContent = "";
         renderCurrentList();
@@ -195,7 +197,8 @@ function setupSubjects() {
         list.classList.toggle("hidden", !hasSubjects);
         emptyState?.classList.toggle("hidden", hasSubjects);
         hint?.classList.toggle("hidden", plan.subjects.length >= 2);
-        addButton.textContent = hasSubjects ? "+ Adicionar matéria" : "+ Adicione sua primeira matéria";
+        addButton.textContent = hasSubjects ? "+ Gravar matéria" : "+ Grave a primeira matéria";
+        addButton.classList.toggle("hidden", !hasSubjects);
 
         plan.subjects.forEach((subject) => {
             normalizeTopics(subject);
@@ -206,6 +209,10 @@ function setupSubjects() {
             headingRow.className = "subject-heading-row";
             const heading = document.createElement("h3");
             heading.textContent = subject.name;
+            const dot = document.createElement("span");
+            dot.className = "subject-dot";
+            dot.style.setProperty("--dot", subjectColor(subject.id));
+            heading.prepend(dot);
             headingRow.append(heading);
             if (subject.deadline) {
                 const deadline = document.createElement("p");
@@ -272,7 +279,7 @@ function setupSubjects() {
                 item.append(topicList);
             } else {
                 const emptyTopics = document.createElement("p");
-                emptyTopics.textContent = "Nenhum assunto adicionado.";
+                emptyTopics.textContent = "Nenhum assunto gravado.";
                 item.append(emptyTopics);
             }
             list.append(item);
@@ -281,6 +288,7 @@ function setupSubjects() {
     }
 
     renderCurrentList = renderList;
+    document.querySelector("#empty-add-subject")?.addEventListener("click", () => showSubjectEditor());
     addButton.addEventListener("click", () => showSubjectEditor());
     list.addEventListener("click", (event) => {
         const button = event.target.closest("button[data-action]");

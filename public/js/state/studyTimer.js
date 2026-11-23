@@ -2,6 +2,7 @@ import { plan } from "./scheduleState.js";
 import { createStudyTimer } from "../util/studyTimer.js";
 import { getTopics, topicDayStatus } from "../util/topics.js";
 import { applyStudyRecord, findStudyAllocation, remainingAllocationMs } from "./studyRecords.js";
+import { createId } from "../util/id.js";
 
 const timer = createStudyTimer({ now: () => Date.now(), getConfig: () => plan.pomodoro });
 const listeners = new Set();
@@ -80,7 +81,7 @@ export function startStudySession({ subjectId, subjectName, allocatedMinutes, sc
     const topic = topics.find((item) => item.id === topicId) || (!topicId && topics.length === 1 ? topics[0] : null);
     if (!topic || topicDayStatus(topic).completed) throw new Error("Escolha um assunto pendente para iniciar a sessão.");
     return act(() => {
-        timer.start({ subjectId, subjectName, allocatedMinutes: limit / 60000, scheduleEntryId, sessionId: crypto.randomUUID() });
+        timer.start({ subjectId, subjectName, allocatedMinutes: limit / 60000, scheduleEntryId, sessionId: createId() });
         metadata = { isTest, date: allocation?.date || null, topicId: topic.id, topicName: topic.name };
         confirmation = false;
         automaticDailyMarked = false;

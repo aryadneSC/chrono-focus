@@ -1,0 +1,151 @@
+/* =========================================================
+   ROMA — acabamento mínimo
+   Textura discreta, tipografia epigráfica e um único gesto de ouro.
+   Nada aqui compete com o conteúdo: é a pele, não o corpo.
+   ========================================================= */
+
+/* --progress é uma fração (1 = ampulheta cheia, 0 = vazia).
+   Registrar o tipo permite animar o número no CSS em vez de saltar. */
+@property --progress {
+    syntax: "<number>";
+    inherits: true;
+    initial-value: 1;
+}
+
+:root {
+    --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- Pórtico: a pedra em volta da página ---------- */
+body {
+    background-color: var(--background-color);
+}
+
+/* grão de papel — não intercepta cliques */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    pointer-events: none;
+    background-image: var(--noise);
+    background-size: 180px 180px;
+    opacity: 0.035;
+    mix-blend-mode: multiply;
+}
+
+/* ---------- A página de mármore ---------- */
+#activity {
+    background-color: var(--background-color);
+}
+
+/* Cabeçalhos e rodapé sem blocos: só o filete separa */
+.page-header,
+.header-sequence {
+    background-color: transparent;
+}
+
+footer {
+    background-color: var(--background-color);
+    background-image: none;
+    border-top: 1px solid var(--border-subtle);
+    box-shadow: 0 -14px 28px -28px rgba(42, 27, 10, 0.9);
+}
+
+/* Marcadores de lista discretos */
+.subject-topics {
+    list-style-type: "·  ";
+}
+
+.subject-topics li::marker {
+    color: var(--gold-text);
+    font-family: var(--font-display);
+}
+
+/* A ampulheta acompanha o --progress registrado */
+.focus-card {
+    transition: --progress 0.55s linear;
+}
+
+/* ---------- Transição entre páginas (View Transitions API) ---------- */
+@media (prefers-reduced-motion: no-preference) {
+    ::view-transition-old(root) {
+        animation: vtOut 0.16s ease both;
+    }
+
+    ::view-transition-new(root) {
+        animation: vtIn 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+}
+
+@keyframes vtOut {
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes vtIn {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+}
+
+/* ---------- Tema escuro: bronze à noite ---------- */
+@media (prefers-color-scheme: dark) {
+    body::after {
+        mix-blend-mode: screen;
+        opacity: 0.03;
+    }
+
+    .laurel-crown-img {
+        filter: saturate(1.05) brightness(1.14);
+    }
+
+    .logo-container {
+        filter: drop-shadow(0 14px 26px rgba(0, 0, 0, 0.55));
+    }
+
+    .focus-time {
+        text-shadow: 0 1px 0 rgba(0, 0, 0, 0.65);
+    }
+
+    .clepsydra-svg {
+        filter: drop-shadow(0 18px 22px rgba(0, 0, 0, 0.55));
+    }
+
+    .time-plinth {
+        box-shadow: 0 16px 28px -26px rgba(0, 0, 0, 0.95);
+    }
+
+    .empty-state-icon,
+    .finish-mark {
+        background-color: var(--marble-3);
+    }
+}
+
+/* ---------- Impressão ---------- */
+@media print {
+    body {
+        background: #fff;
+    }
+
+    body::after,
+    .skyline,
+    footer,
+    .clepsydra {
+        display: none !important;
+    }
+
+    #activity {
+        width: auto;
+        border: 0;
+        box-shadow: none;
+        background: #fff;
+        padding: 0;
+    }
+
+    .page-content {
+        padding: 0;
+    }
+}

@@ -17,43 +17,96 @@
 }
 
 .text-neutral {
-    color: var(--neutral-color);
+    color: var(--muted-text-color);
 }
 
 .badge-text {
-    background-color: var(--info-bg);
-    color: var(--info-color);
-    border: 1px solid var(--info-border);
-    font-size: var(--font-size-xs);
-    font-weight: 600;
+    display: inline-block;
+    background-color: var(--gold-soft);
+    color: var(--gold-text);
+    border: 1px solid var(--gold-line);
+    border-radius: var(--radius-sm);
+    padding: 0.1rem var(--space-sm);
+    font-family: var(--font-display);
+    font-size: 0.74rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
 }
 
+/* ---------- Card ---------- */
 .card-accent {
+    position: relative;
     background-color: var(--surface-color);
     border: 1px solid var(--border-subtle);
-    border-inline-start: 4px solid var(--primary-color);
-    border-radius: var(--radius);
+    border-radius: 12px;
     padding: var(--space-lg);
     gap: var(--space-sm);
     box-shadow: var(--shadow-card);
 }
 
-.card-accent[data-area="exatas"] {
-    border-inline-start-color: var(--subject-exatas);
+/* ---------- Ornamento divisório ---------- */
+.roman-divider {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    width: 100%;
+    margin-block: var(--space-md);
+    color: var(--gold-text);
+    font-size: 0.75rem;
+    opacity: 0.8;
 }
 
-.card-accent[data-area="humanas"] {
-    border-inline-start-color: var(--subject-humanas);
+.roman-divider::before,
+.roman-divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--rule-gold);
 }
 
-.card-accent[data-area="biologicas"] {
-    border-inline-start-color: var(--subject-biologicas);
+/* ---------- Estado vazio ---------- */
+.empty-state-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-sm);
+    padding: var(--space-2xl) var(--space-xl);
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    margin-block: var(--space-md);
 }
 
-.card-accent[data-area="idiomas"] {
-    border-inline-start-color: var(--subject-idiomas);
+.empty-state-icon {
+    width: 46px;
+    height: 46px;
+    display: grid;
+    place-items: center;
+    border-radius: var(--radius-pill);
+    background-color: var(--gold-soft);
+    color: var(--gold-text);
+    border: 1px solid var(--gold-line);
+    margin-bottom: var(--space-xs);
 }
 
-.card-accent[data-alert="true"] {
-    border-inline-start-color: var(--danger-solid);
+.empty-state-icon svg {
+    width: 22px;
+    height: 22px;
+}
+
+.empty-state-card h3 {
+    margin: 0;
+    color: var(--primary-text-color);
+}
+
+.empty-state-card p {
+    max-width: 40ch;
+    margin: 0;
+}
+
+.hidden {
+    display: none !important;
 }

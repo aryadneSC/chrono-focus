@@ -4,7 +4,9 @@ import { plan } from "../state/scheduleState.js";
 import { remainingAllocationMs } from "../state/studyRecords.js";
 import { startStudySession } from "./studySession.js";
 import { formatTimerDuration } from "../util/studyTimer.js";
-import { formatLocalDate, localDateValue } from "../util/dates.js";
+import { formatLocalDate, localDateValue, parseLocalDate } from "../util/dates.js";
+import { latinDateLabel } from "../util/roman.js";
+import { subjectColor } from "../util/colors.js";
 import { getTopics, visibleTopics, topicDayStatus } from "../util/topics.js";
 
 const selectedTopics = new Map();
@@ -15,6 +17,11 @@ function renderHome() {
     const date = document.querySelector("#home-date");
     date.textContent = formatLocalDate(today);
     date.dataset.date = today;
+    const romanDate = document.querySelector("#home-date-roman");
+    if (romanDate) {
+        const parsed = parseLocalDate(today);
+        romanDate.textContent = parsed ? latinDateLabel(parsed) : "";
+    }
     const count = document.querySelector("#home-pending-count");
     const list = document.querySelector("#home-subject-list");
     list.replaceChildren();
@@ -30,6 +37,14 @@ function renderHome() {
         return { session, subject, topics, completedToday, allTopicsDone, exhausted, done, available };
     }).filter((card) => card.available || card.completedToday || (card.exhausted && card.topics.length > 0));
     const pendingCount = cards.filter((card) => card.available).length;
+    const doneCount = cards.filter((card) => card.done).length;
+    const ring = document.querySelector("#day-ring");
+    if (ring) {
+        ring.style.setProperty("--value", String(cards.length ? (doneCount / cards.length) * 100 : 0));
+        ring.setAttribute("aria-label", `${doneCount} de ${cards.length} sessões concluídas`);
+    }
+    const ringLabel = document.querySelector("#day-ring-label");
+    if (ringLabel) ringLabel.textContent = `${doneCount}/${cards.length}`;
     count.textContent = !plan.scheduleGenerated
         ? (plan.schedule.length ? "Cronograma desatualizado. Atualize na aba Cronograma." : "Gere um cronograma para consultar as sessões de hoje.")
         : !day ? "Hoje está fora da janela do cronograma."
@@ -43,8 +58,12 @@ function renderHome() {
         card.dataset.sessionId = session.id;
         const heading = document.createElement("h3");
         heading.textContent = session.subjectName;
+        const dot = document.createElement("span");
+        dot.className = "subject-dot";
+        dot.style.setProperty("--dot", subjectColor(session.subjectId));
+        heading.prepend(dot);
         const duration = document.createElement("p");
-        duration.textContent = `Tempo planejado: ${session.duration}`;
+        duration.textContent = `Tempo consagrado: ${session.duration}`;
         const error = document.createElement("p");
         error.className = "text-danger";
         error.id = `topic-error-${session.id}`;
@@ -81,7 +100,7 @@ function renderHome() {
         const start = document.createElement("button");
         start.type = "button";
         start.className = "btn btn-primary";
-        start.textContent = done ? "Sessão concluída" : "Iniciar sessão";
+        start.textContent = done ? "Concluída" : "Iniciar foco";
         start.disabled = !available;
         start.addEventListener("click", () => {
             if (localDateValue() !== today || !plan.scheduleGenerated) { renderHome(); return; }

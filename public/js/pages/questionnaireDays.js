@@ -72,12 +72,12 @@ function setupDays() {
             label.textContent = dayNames[day];
             label.htmlFor = `study-time-${day}`;
             const input = document.createElement("input");
-            input.type = "text";
+            input.type = "time";
             input.id = `study-time-${day}`;
             input.className = "input-txt";
-            input.inputMode = "numeric";
-            input.placeholder = "00:30";
-            input.pattern = "[0-9]{2}:[0-5][0-9]";
+            input.min = "00:30";
+            input.max = "16:00";
+            input.step = "60";
             input.value = plan.studyTimeByDay[day] || "";
             input.setAttribute("aria-describedby", "routine-time-error");
             input.setAttribute("aria-label", `Tempo de estudo em ${dayNames[day]}, horas:minutos`);
