@@ -1,0 +1,20 @@
+@layer normalize, settings, base, layout, components, pages, utilities, rome;
+
+@import url("https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.min.css") layer(normalize);
+@import url("./radix-colors.css?v=5") layer(settings);
+@import url("./settings.css?v=5") layer(settings);
+@import url("./base.css?v=5") layer(base);
+@import url("./layout.css?v=5") layer(layout);
+@import url("./components.css?v=5") layer(components);
+@import url("./pages.css?v=5") layer(pages);
+@import url("./utilities.css?v=5") layer(utilities);
+@import url("./rome.css?v=5") layer(rome);
+
+:root {
+  --bg-default: var(--background-color);
+  --bg-subtle: var(--surface-color);
+  --bg-muted: var(--brighter-surface-color);
+  --fg-default: var(--primary-text-color);
+  --fg-muted: var(--secondary-text-color);
+  --accent-default: var(--primary-color);
+}
